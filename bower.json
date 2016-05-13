@@ -2,9 +2,9 @@
   "name": "demo-todo-mvc",
   "version": "1.0.0",
   "private": true,
-  "dependencies": {
+  "devDependencies": {
     "handlebars": "~4.0.5",
-    "jquery": "~2.2.3"
-  },
-  "devDependencies": {}
+    "jquery": "~2.2.3",
+    "structurejs": "~0.12.3"
+  }
 }
