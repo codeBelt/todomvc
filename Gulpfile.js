@@ -8,6 +8,7 @@ const useref = require('gulp-useref');
 const header = require('gulp-header');
 const cssnano = require('gulp-cssnano');
 const browserSync = require('browser-sync').create();
+const jsonServer = require('json-server');
 
 /**
  * Uncomment the next line to report the Gulp execution time (for optimization, etc)
@@ -129,6 +130,15 @@ gulp.task('lint', (done) => {
  * @options --open
  */
 gulp.task('watch', (done) => {
+
+    // Mock data
+    const jsonServerFakerData = require(`./${env.DIR_DEST}/db.js`);
+    // JSON Server setup
+    const server = jsonServer.create();
+    server.use(jsonServer.defaults());
+    server.use(jsonServer.router(jsonServerFakerData));
+
+    // BrowserSync setup
     browserSync.init({
         notify: false,
         injectChanges: true,
@@ -136,13 +146,22 @@ gulp.task('watch', (done) => {
         server: {
             baseDir: env.DIR_DEST
         }
+    }, (err, bs) => {
+        if (err) {
+            console.warn(err);
+        }
+
+        // Add JSON Server as a middleware to BrowserSync
+        bs.app.use('/api', server);
+
     });
 
+    // Watch and trigger tasks on file changes
     gulp.watch(env.DIR_SRC + '/assets/scripts/**/*', ['buildScripts']);
     gulp.watch(env.DIR_SRC + '/assets/styles/**/*', ['buildStyles']);
     gulp.watch(env.DIR_SRC + '/**/*.{hbs,html}', ['buildMarkup']);
     gulp.watch(env.DIR_SRC + '/templates/jst/**/*', ['buildJST']);
-    gulp.watch(env.DIR_SRC + '/assets/{media,data}/**/*', ['buildStatic']);
+    gulp.watch([env.DIR_SRC + '/assets/{media,data}/**/*', env.DIR_SRC + '/db.*'], ['buildStatic']);
 });
 
 /**

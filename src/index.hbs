@@ -1,27 +1,27 @@
 {{#extend "layout"}}
     {{#content "body" mode="append" }}
         <section class="todoapp">
-            <header class="header">
+            <header class="header js-HeaderView">
                 <h1>todos</h1>
-                <input class="new-todo js-input" placeholder="What needs to be done?" autofocus>
+                <input class="new-todo js-HeaderView-input" placeholder="What needs to be done?" autofocus>
             </header>
 
-            <section class="main">
-                <input class="toggle-all js-toggleSelectAll" type="checkbox">
+            <section class="main js-BodyView">
+                <input class="toggle-all js-BodyView-toggleSelectAll" type="checkbox">
                 <label for="toggle-all">Mark all as complete</label>
-                <ul class="todo-list js-todoList">
+                <ul class="todo-list js-BodyView-todoList">
 
                 </ul>
             </section>
 
-            <footer class="footer">
+            <footer class="footer js-FooterView">
                 <span class="todo-count"></span>
                 <ul class="filters">
                     <li><a href="#/" class="selected">All</a></li>
                     <li><a href="#/active">Active</a></li>
                     <li><a href="#/completed">Completed</a></li>
                 </ul>
-                <button class="clear-completed js-clearCompletedBtn">Clear completed</button>
+                <button class="clear-completed js-FooterView-clearCompletedBtn">Clear completed</button>
             </footer>
         </section>
 

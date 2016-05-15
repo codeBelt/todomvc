@@ -1,6 +1,11 @@
 import DOMElement from 'structurejs/display/DOMElement';
 
-import KeyCode from './constants/KeyCode';
+import TodoAction from './actions/TodoAction';
+import TodoStore from './stores/TodoStore';
+import HeaderView from './views/HeaderView';
+import BodyView from './views/BodyView';
+import FooterView from './views/FooterView';
+
 /**
  * TODO: YUIDoc_comment
  *
@@ -10,10 +15,31 @@ import KeyCode from './constants/KeyCode';
  **/
 class App extends DOMElement {
 
-    _$input = null;
+
     _$toggleSelectAll = null;
     _$todoList = null;
     _$clearCompletedBtn = null;
+
+    /**
+     * @property _headerView
+     * @type {HeaderView}
+     * @private
+     */
+    _headerView = null;
+
+    /**
+     * @property _bodyView
+     * @type {BodyView}
+     * @private
+     */
+    _bodyView = null;
+
+    /**
+     * @property _footerView
+     * @type {FooterView}
+     * @private
+     */
+    _footerView = null;
 
     constructor() {
         super();
@@ -24,11 +50,17 @@ class App extends DOMElement {
      */
     create() {
         super.create();
+      
+        this._headerView = new HeaderView(this.$element.find('.js-HeaderView'));
+        this.addChild(this._headerView);
 
-        this._$input = this.$element.find('.js-input');
-        this._$toggleSelectAll = this.$element.find('.js-toggleSelectAll');
-        this._$todoList = this.$element.find('.js-todoList');
-        this._$clearCompletedBtn = this.$element.find('.js-clearCompletedBtn');
+        this._bodyView = new BodyView(this.$element.find('.js-BodyView'));
+        this.addChild(this._bodyView);
+
+        this._footerView = new FooterView(this.$element.find('.js-FooterView'));
+        this.addChild(this._footerView);
+
+        TodoAction.load();
     }
 
     /**
@@ -37,7 +69,7 @@ class App extends DOMElement {
     enable() {
         if (this.isEnabled === true) { return; }
 
-        this._$input.addEventListener('keypress', this._onEnterKey, this);
+        TodoStore.addEventListener(TodoStore.CHANGE_EVENT, this._onStoreChange, this);
 
         super.enable();
     }
@@ -48,7 +80,7 @@ class App extends DOMElement {
     disable() {
         if (this.isEnabled === false) { return; }
 
-        this._$input.removeEventListener('keypress', this._onEnterKey, this);
+        TodoStore.removeEventListener(TodoStore.CHANGE_EVENT, this._onStoreChange, this);
 
         super.disable();
     }
@@ -77,20 +109,21 @@ class App extends DOMElement {
     //--------------------------------------------------------------------------------
 
     /**
-     * TODO: YUIDoc_comment
+     * Triggered when event the TodoStore.{{#crossLink "TodoStore/CHANGE_EVENT:event"}}{{/crossLink}} is dispatched.
      *
-     * @method _onEnterKey
-     * @protected
+     * @method _onStoreChange
+     * @param event
+     * @private
      */
-    _onEnterKey(event) {
-        if (event.keyCode === KeyCode.ENTER) {
-            const text = this._$input.val();
-
-            console.log("text", text);
-            this._$input.blur();
-            this._$input.val('');
-        }
+    _onStoreChange(event) {
+        const todoModels = TodoStore.getAll();
+console.log("todoModels", todoModels);
+        // this._headerView.update(todoModels);
+        // this._bodyView.update(todoModels);
+        // this._footerView.update(todoModels);
     }
+
+
 
 }
 
