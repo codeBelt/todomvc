@@ -30,11 +30,11 @@ class TodoEvent extends BaseEvent {
     /**
      * Event to be dispatched when completed todo's need to me removed.
      *
-     * @event CLEAR_COMPLETE
+     * @event CLEAR_COMPLETED
      * @type {string}
      * @static
      */
-    static CLEAR_COMPLETE = 'TodoEvent.clearComplete';
+    static CLEAR_COMPLETED = 'TodoEvent.clearCompleted';
 
     constructor(type, bubbles = false, cancelable = false, data = null) {
         super(type, bubbles, cancelable, data);

@@ -45,7 +45,7 @@ class TodoStore extends EventDispatcher {
         if (this.isEnabled === true) { return; }
 
         EventBroker.addEventListener(TodoEvent.LOAD, this._onLoad, this);
-        EventBroker.addEventListener(TodoEvent.CLEAR_COMPLETE, this._onClear, this);
+        EventBroker.addEventListener(TodoEvent.CLEAR_COMPLETED, this._onClear, this);
 
         super.enable();
     }
@@ -57,7 +57,7 @@ class TodoStore extends EventDispatcher {
         if (this.isEnabled === false) { return; }
 
         EventBroker.removeEventListener(TodoEvent.LOAD, this._onLoad, this);
-        EventBroker.removeEventListener(TodoEvent.CLEAR_COMPLETE, this._onClear, this);
+        EventBroker.removeEventListener(TodoEvent.CLEAR_COMPLETED, this._onClear, this);
 
         super.disable();
     }
@@ -77,22 +77,6 @@ class TodoStore extends EventDispatcher {
         return this._storeWarehouse;
     }
 
-    /**
-     * Updates the store.
-     *
-     * @method _updateStore
-     * @protected
-     */
-    _updateStore(data) {
-        this._storeWarehouse = data;
-
-        this.dispatchEvent(this.CHANGE_EVENT);
-    }
-
-    //--------------------------------------------------------------------------------
-    // HELPER METHOD
-    //--------------------------------------------------------------------------------
-
     //--------------------------------------------------------------------------------
     // EVENTS HANDLERS
     //--------------------------------------------------------------------------------
@@ -107,7 +91,9 @@ class TodoStore extends EventDispatcher {
     _onLoad(event) {
         const todoModels = event.data;
 
-        this._updateStore(todoModels);
+        this._storeWarehouse = todoModels;
+
+        this.dispatchEvent(this.CHANGE_EVENT);
     }
 
     /**
@@ -118,7 +104,17 @@ class TodoStore extends EventDispatcher {
      * @protected
      */
     _onClear(event) {
-        // this._updateStore(null);
+        const todoModelIds = event.data;
+
+        for (let i = this._storeWarehouse.length - 1; i >= 0; i--) {
+            const todoModelId = this._storeWarehouse[i].id;
+
+            if (todoModelIds.indexOf(todoModelId) >= 0) {
+                this._storeWarehouse.splice(i, 1);
+            }
+        }
+
+        this.dispatchEvent(this.CHANGE_EVENT);
     }
 
 }

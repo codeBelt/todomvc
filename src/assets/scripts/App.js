@@ -95,7 +95,6 @@ class App extends DOMElement {
 
         const todoModels = TodoStore.getAll();
 
-        console.log("currentRoute", currentRoute);
         let models;
 
         switch (currentRoute.routePattern) {
@@ -110,13 +109,8 @@ class App extends DOMElement {
                 break;
         }
 
-        console.log("currentRoute", currentRoute.routePattern);
-        console.log("layout", models);
-        // Layout or update the objects in this parent class.
-
-        // this._headerView.layout(todoModels);
         this._bodyView.layout(models);
-        this._footerView.layout(todoModels.filter(todoModel => todoModel.completed === false));
+        this._footerView.layout(todoModels);
     }
 
     /**
@@ -143,9 +137,6 @@ class App extends DOMElement {
      * @private
      */
     _onStoreChange(event) {
-        // const todoModels = TodoStore.getAll();
-        // console.log("todoModels", todoModels);
-
         this.layout();
     }
 
@@ -157,7 +148,6 @@ class App extends DOMElement {
      * @private
      */
     _onRoute(event) {
-        // console.log("event", event);
         this.layout();
     }
 

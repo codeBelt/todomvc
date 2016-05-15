@@ -1,5 +1,6 @@
 import DOMElement from 'structurejs/display/DOMElement';
 
+import TodoAction from '../actions/TodoAction';
 /**
  * TODO: YUIDoc_comment
  *
@@ -17,6 +18,15 @@ class FooterView extends DOMElement {
      * @protected
      */
     _$clearCompletedBtn = null;
+    
+    /**
+     * TODO: YUIDoc_comment
+     *
+     * @property _todoModels
+     * @type {Array<TodoModel>}
+     * @protected
+     */
+    _todoModels = null;
 
     constructor($element) {
         super($element);
@@ -38,7 +48,7 @@ class FooterView extends DOMElement {
     enable() {
         if (this.isEnabled === true) { return; }
 
-        // Enable the child objects and/or add any event listeners.
+        this._$clearCompletedBtn.addEventListener('click', this._onClick, this);
 
         super.enable();
     }
@@ -49,7 +59,7 @@ class FooterView extends DOMElement {
     disable() {
         if (this.isEnabled === false) { return; }
 
-        // Disable the child objects and/or remove any event listeners.
+        this._$clearCompletedBtn.removeEventListener('click', this._onClick, this);
 
         super.disable();
     }
@@ -59,9 +69,11 @@ class FooterView extends DOMElement {
      */
     layout(todoModels) {
         if (todoModels == null) { return; }
+        
+        this._todoModels = todoModels;
 
-        const activeTodoCount = todoModels.length;
-        const plural = activeTodoCount === 1 ? '' : 's';
+        const activeTodoCount = this._todoModels.length;
+        const plural = (activeTodoCount === 1) ? '' : 's';
         const text = `<strong>${activeTodoCount}</strong> item${plural} left`;
 
         this._$count.html(text);
@@ -77,6 +89,22 @@ class FooterView extends DOMElement {
         // This super method will also null out your properties for garbage collection.
 
         super.destroy();
+    }
+
+    /**
+     * TODO: YUIDoc_comment
+     *
+     * @method _onClick
+     * @protected
+     */
+    _onClick(event) {
+        // List of TodoModel ids that need to be removed.
+        const todoModelIds = this
+            ._todoModels
+            .filter(todoModel => todoModel.completed === true)
+            .map(todoModel => todoModel.id);
+        
+        TodoAction.clearCompleted(todoModelIds);
     }
 
 }

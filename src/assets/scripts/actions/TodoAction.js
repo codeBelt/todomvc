@@ -28,7 +28,6 @@ class TodoAction extends BaseObject {
     async load() {
         try {
 
-            // Using fetch - https://github.com/github/fetch
             const response = await fetch('/api/todos');
             const data = await response.json();
 
@@ -37,6 +36,27 @@ class TodoAction extends BaseObject {
 
             // Dispatch the models to the store.
             EventBroker.dispatchEvent(TodoEvent.LOAD, todoModels);
+
+        } catch(error) { console.error(error); }
+    }
+
+    /**
+     * TODO: YUIDoc_comment
+     *
+     * @method clearCompleted
+     * @param todoModelIds {Array<number>}
+     * @public
+     */
+    async clearCompleted(todoModelIds) {
+        try {
+
+            const promises = todoModelIds.map(todoModelId => {
+                return fetch(`/api/todos/${todoModelId}`, { method: 'DELETE' });
+            });
+
+            let results = await Promise.all(promises);
+
+            EventBroker.dispatchEvent(TodoEvent.CLEAR_COMPLETED, todoModelIds);
 
         } catch(error) { console.error(error); }
     }
