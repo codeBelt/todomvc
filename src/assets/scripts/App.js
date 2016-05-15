@@ -1,4 +1,5 @@
 import DOMElement from 'structurejs/display/DOMElement';
+import Router from 'structurejs/controller/Router';
 
 import TodoAction from './actions/TodoAction';
 import TodoStore from './stores/TodoStore';
@@ -14,11 +15,6 @@ import FooterView from './views/FooterView';
  * @constructor
  **/
 class App extends DOMElement {
-
-
-    _$toggleSelectAll = null;
-    _$todoList = null;
-    _$clearCompletedBtn = null;
 
     /**
      * @property _headerView
@@ -50,7 +46,7 @@ class App extends DOMElement {
      */
     create() {
         super.create();
-      
+
         this._headerView = new HeaderView(this.$element.find('.js-HeaderView'));
         this.addChild(this._headerView);
 
@@ -61,6 +57,11 @@ class App extends DOMElement {
         this.addChild(this._footerView);
 
         TodoAction.load();
+
+        Router.add('', this._onRoute, this);
+        Router.add('active', this._onRoute, this);
+        Router.add('completed', this._onRoute, this);
+        Router.start();
     }
 
     /**
@@ -89,7 +90,33 @@ class App extends DOMElement {
      * @overridden DOMElement.layout
      */
     layout() {
+        const currentRoute = Router.getCurrentRoute();
+        if (currentRoute == null) { return; }
+
+        const todoModels = TodoStore.getAll();
+
+        console.log("currentRoute", currentRoute);
+        let models;
+
+        switch (currentRoute.routePattern) {
+            case '':
+                models = todoModels;
+                break;
+            case 'active':
+                models = todoModels.filter(todoModel => todoModel.completed === false);
+                break;
+            case 'completed':
+                models = todoModels.filter(todoModel => todoModel.completed === true);
+                break;
+        }
+
+        console.log("currentRoute", currentRoute.routePattern);
+        console.log("layout", models);
         // Layout or update the objects in this parent class.
+
+        // this._headerView.layout(todoModels);
+        this._bodyView.layout(models);
+        this._footerView.layout(todoModels.filter(todoModel => todoModel.completed === false));
     }
 
     /**
@@ -116,14 +143,23 @@ class App extends DOMElement {
      * @private
      */
     _onStoreChange(event) {
-        const todoModels = TodoStore.getAll();
-console.log("todoModels", todoModels);
-        // this._headerView.update(todoModels);
-        // this._bodyView.update(todoModels);
-        // this._footerView.update(todoModels);
+        // const todoModels = TodoStore.getAll();
+        // console.log("todoModels", todoModels);
+
+        this.layout();
     }
 
-
+    /**
+     * TODO: YUIDoc_comment
+     *
+     * @method _onRoute
+     * @param event {RouterEvent}
+     * @private
+     */
+    _onRoute(event) {
+        // console.log("event", event);
+        this.layout();
+    }
 
 }
 

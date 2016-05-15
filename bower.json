@@ -8,6 +8,7 @@
     "structurejs": "~0.12.3"
   },
   "dependencies": {
-    "fetch": "~1.0.0"
+    "fetch": "~1.0.0",
+    "structurejs": "~0.12.3"
   }
 }

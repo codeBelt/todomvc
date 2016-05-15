@@ -30,13 +30,6 @@ class TodoModel extends BaseModel {
      */
     completed = false;
 
-    /**
-     * @property checked
-     * @type {boolean}
-     * @public
-     */
-    checked = false;
-
     constructor(data) {
         super();
 

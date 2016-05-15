@@ -1,5 +1,7 @@
 import DOMElement from 'structurejs/display/DOMElement';
 
+import TodoItemView from './bodyview/TodoItemView';
+
 /**
  * TODO: YUIDoc_comment
  *
@@ -17,16 +19,16 @@ class BodyView extends DOMElement {
      * @protected
      */
     _$toggleSelectAll = null;
-    
+
     /**
      * TODO: YUIDoc_comment
      *
-     * @property _$todoList
-     * @type {jQuery}
+     * @property _todoListContainer
+     * @type {DOMElement}
      * @protected
      */
-    _$todoList = null;
-    
+    _todoListContainer = null;
+
     constructor($element) {
         super($element);
     }
@@ -36,9 +38,11 @@ class BodyView extends DOMElement {
      */
     create() {
         super.create();
-        
+
         this._$toggleSelectAll = this.$element.find('.js-BodyView-toggleSelectAll');
-        this._$todoList = this.$element.find('.js-BodyView-todoList');
+        this._todoListContainer = this.getChild('.js-BodyView-todoList');
+
+        console.log("his._todoListContainer", this._todoListContainer);
     }
 
     /**
@@ -66,8 +70,16 @@ class BodyView extends DOMElement {
     /**
      * @overridden DOMElement.layout
      */
-    layout() {
-        // Layout or update the objects in this parent class.
+    layout(todoModels) {
+        if (todoModels == null) { return; }
+
+        this._todoListContainer.removeChildren();
+
+        const todoItemViews = todoModels.map(todoModel => new TodoItemView(todoModel));
+
+        todoItemViews.forEach(todoItemView => {
+            this._todoListContainer.addChild(todoItemView);
+        });
     }
 
     /**
@@ -75,7 +87,7 @@ class BodyView extends DOMElement {
      */
     destroy() {
         this.disable();
-        
+
         // Call destroy on any child objects.
         // This super method will also null out your properties for garbage collection.
 

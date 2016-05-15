@@ -29,6 +29,7 @@ class FooterView extends DOMElement {
         super.create();
 
         this._$clearCompletedBtn = this.$element.find('.js-FooterView-clearCompletedBtn');
+        this._$count = this.$element.find('.js-FooterView-count');
     }
 
     /**
@@ -56,8 +57,14 @@ class FooterView extends DOMElement {
     /**
      * @overridden DOMElement.layout
      */
-    layout() {
-        // Layout or update the objects in this parent class.
+    layout(todoModels) {
+        if (todoModels == null) { return; }
+
+        const activeTodoCount = todoModels.length;
+        const plural = activeTodoCount === 1 ? '' : 's';
+        const text = `<strong>${activeTodoCount}</strong> item${plural} left`;
+
+        this._$count.html(text);
     }
 
     /**
