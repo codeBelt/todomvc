@@ -14,7 +14,7 @@ class TodoModel extends BaseModel {
      * @type {number}
      * @public
      */
-    id = null;
+    id = new Date().getTime();
 
     /**
      * @property title
@@ -45,15 +45,6 @@ class TodoModel extends BaseModel {
         super.update(data);
 
         // Override any values after the default super update method has set the values.
-
-        if (this.id == null) {
-            // Creates an id for the model if there is not one.
-            // This happens when a new todo task is created.
-            let timestamp = new Date();
-            timestamp = timestamp.getTime();
-
-            this.id = timestamp;
-        }
     }
 
 }

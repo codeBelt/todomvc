@@ -34,7 +34,7 @@ class TodoAction extends BaseObject {
             // Sanitize the response data by creating client-side models to used within the application.
             const todoModels = data.map(todoItem => new TodoModel(todoItem));
 
-            // Dispatch the models to the store.
+            // Dispatch so the store can get the event.
             EventBroker.dispatchEvent(TodoEvent.LOAD, todoModels);
 
         } catch(error) { console.error(error); }
@@ -56,7 +56,59 @@ class TodoAction extends BaseObject {
 
             let results = await Promise.all(promises);
 
+            // Dispatch so the store can get the event.
             EventBroker.dispatchEvent(TodoEvent.CLEAR_COMPLETED, todoModelIds);
+
+        } catch(error) { console.error(error); }
+    }
+
+    /**
+     * TODO: YUIDoc_comment
+     *
+     * @method markCompleted
+     * @param todoModelId {number}
+     * @public
+     */
+    async markCompleted(todoModelId) {
+        try {
+
+            // const response = await fetch(`/api/todos/${todoModelId}`, { method: 'DELETE' });
+            // const data = await response.json();
+            // console.log("response", response);
+            // console.log("data", data);
+            //
+            // Dispatch so the store can get the event.
+            // EventBroker.dispatchEvent(TodoEvent.LOAD, todoModels);
+
+        } catch(error) { console.error(error); }
+    }
+
+    /**
+     * TODO: YUIDoc_comment
+     *
+     * @method add
+     * @param todoModel {TodoModel}
+     * @public
+     */
+    async add(todoModel) {
+        try {
+
+            const response = await fetch(`/api/todos/`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: todoModel.toJSONString()
+            });
+
+            const data = await response.json();
+
+            // Example of updating the id if you needed from the server.
+            todoModel.id = data.id;
+
+            // Dispatch so the store can get the event.
+            EventBroker.dispatchEvent(TodoEvent.ADD, todoModel);
 
         } catch(error) { console.error(error); }
     }

@@ -1,6 +1,8 @@
 import DOMElement from 'structurejs/display/DOMElement';
 
 import KeyCode from '../constants/KeyCode';
+import TodoModel from '../models/TodoModel';
+import TodoAction from '../actions/TodoAction';
 
 /**
  * TODO: YUIDoc_comment
@@ -79,9 +81,11 @@ class HeaderView extends DOMElement {
      */
     _onEnterKey(event) {
         if (event.keyCode === KeyCode.ENTER) {
-            const text = this._$input.val();
+            const todoModel = new TodoModel();
+            todoModel.title = this._$input.val();
+            
+            TodoAction.add(todoModel);
 
-            console.log("text", text);
             this._$input.blur();
             this._$input.val('');
         }
