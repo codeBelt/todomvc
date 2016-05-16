@@ -88,7 +88,7 @@ class TodoItemView extends DOMElement {
     _onChange(event) {
         const $target = $(event.target);
         const isChecked = $target.prop('checked');
-        const todoId = $target.data('todo-id')
+        const todoId = $target.data('todo-id');
 
         console.log("todoId", todoId);
         console.log("$target", $target);

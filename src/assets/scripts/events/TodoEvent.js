@@ -28,6 +28,15 @@ class TodoEvent extends BaseEvent {
     static ADD = 'TodoEvent.add';
 
     /**
+     * Event to be dispatched when a todo item is updated.
+     *
+     * @event UPDATE
+     * @type {string}
+     * @static
+     */
+    static UPDATE = 'TodoEvent.update';
+
+    /**
      * Event to be dispatched when completed todo's need to me removed.
      *
      * @event CLEAR_COMPLETED

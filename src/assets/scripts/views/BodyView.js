@@ -51,7 +51,7 @@ class BodyView extends DOMElement {
     enable() {
         if (this.isEnabled === true) { return; }
 
-        // Enable the child objects and/or add any event listeners.
+        this._$toggleSelectAll.addEventListener('click', this._onSelectAllToggle, this);
 
         super.enable();
     }
@@ -62,7 +62,7 @@ class BodyView extends DOMElement {
     disable() {
         if (this.isEnabled === false) { return; }
 
-        // Disable the child objects and/or remove any event listeners.
+        this._$toggleSelectAll.removeEventListener('click', this._onSelectAllToggle, this);
 
         super.disable();
     }
@@ -92,6 +92,24 @@ class BodyView extends DOMElement {
         // This super method will also null out your properties for garbage collection.
 
         super.destroy();
+    }
+
+    //--------------------------------------------------------------------------------
+    // EVENTS HANDLERS
+    //--------------------------------------------------------------------------------
+
+    /**
+     * TODO: YUIDoc_comment
+     *
+     * @method _onSelectAllToggle
+     * @protected
+     */
+    _onSelectAllToggle(event) {
+        const $target = $(event.target);
+        const isChecked = $target.prop('checked');
+
+        console.log("isChecked", isChecked);
+        console.log("_onSelectAllToggle");
     }
 
 }

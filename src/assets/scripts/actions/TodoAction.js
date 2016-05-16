@@ -65,22 +65,40 @@ class TodoAction extends BaseObject {
     /**
      * TODO: YUIDoc_comment
      *
-     * @method markCompleted
-     * @param todoModelId {number}
+     * @method update
+     * @param todoModel {number}
      * @public
      */
-    async markCompleted(todoModelId) {
-        try {
+    async update(todoModel) {
+        EventBroker.dispatchEvent(TodoEvent.UPDATE, todoModel);
 
-            // const response = await fetch(`/api/todos/${todoModelId}`, { method: 'DELETE' });
-            // const data = await response.json();
-            // console.log("response", response);
-            // console.log("data", data);
-            //
-            // Dispatch so the store can get the event.
-            // EventBroker.dispatchEvent(TodoEvent.LOAD, todoModels);
-
-        } catch(error) { console.error(error); }
+        // try {
+        //
+        //     const response = await fetch(`/api/todos/`, {
+        //         method: 'PATCH',
+        //         headers: {
+        //             'Accept': 'application/json',
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: todoModel.toJSONString()
+        //     });
+        //
+        //     const responseData = await response.json();
+        //
+        //     // Example of updating the id if you needed from the server.
+        //     todoModel.id = responseData.id;
+        //
+        //     // Dispatch so the store can get the event.
+        //     EventBroker.dispatchEvent(TodoEvent.UPDATE, todoModel);
+        //     // const response = await fetch(`/api/todos/${todoModelId}`, { method: 'DELETE' });
+        //     // const data = await response.json();
+        //     // console.log("response", response);
+        //     // console.log("data", data);
+        //     //
+        //     // Dispatch so the store can get the event.
+        //     // EventBroker.dispatchEvent(TodoEvent.LOAD, todoModels);
+        //
+        // } catch(error) { console.error(error); }
     }
 
     /**
@@ -102,10 +120,10 @@ class TodoAction extends BaseObject {
                 body: todoModel.toJSONString()
             });
 
-            const data = await response.json();
+            const responseData = await response.json();
 
             // Example of updating the id if you needed from the server.
-            todoModel.id = data.id;
+            todoModel.id = responseData.id;
 
             // Dispatch so the store can get the event.
             EventBroker.dispatchEvent(TodoEvent.ADD, todoModel);

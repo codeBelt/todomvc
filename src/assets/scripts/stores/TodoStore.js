@@ -46,6 +46,7 @@ class TodoStore extends EventDispatcher {
 
         EventBroker.addEventListener(TodoEvent.LOAD, this._onLoad, this);
         EventBroker.addEventListener(TodoEvent.ADD, this._onAdd, this);
+        EventBroker.addEventListener(TodoEvent.UPDATE, this._onUpdate, this);
         EventBroker.addEventListener(TodoEvent.CLEAR_COMPLETED, this._onClear, this);
 
         super.enable();
@@ -58,7 +59,8 @@ class TodoStore extends EventDispatcher {
         if (this.isEnabled === false) { return; }
 
         EventBroker.removeEventListener(TodoEvent.LOAD, this._onLoad, this);
-        EventBroker.addEventListener(TodoEvent.ADD, this._onAdd, this);
+        EventBroker.removeEventListener(TodoEvent.ADD, this._onAdd, this);
+        EventBroker.removeEventListener(TodoEvent.UPDATE, this._onUpdate, this);
         EventBroker.removeEventListener(TodoEvent.CLEAR_COMPLETED, this._onClear, this);
 
         super.disable();
@@ -108,6 +110,20 @@ class TodoStore extends EventDispatcher {
         const todoModel = event.data;
 
         this._storeWarehouse.push(todoModel);
+
+        this.dispatchEvent(this.CHANGE_EVENT);
+    }
+
+    /**
+     * TODO: YUIDoc_comment
+     *
+     * @method _onUpdate
+     * @protected
+     */
+    _onUpdate(event) {
+        const todoModel = event.data;
+
+        // this._storeWarehouse.push(todoModel);
 
         this.dispatchEvent(this.CHANGE_EVENT);
     }
