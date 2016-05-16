@@ -1,5 +1,7 @@
 import DOMElement from 'structurejs/display/DOMElement';
 
+import TodoAction from '../../actions/TodoAction';
+
 /**
  * TODO: YUIDoc_comment
  *
@@ -89,6 +91,8 @@ class TodoItemView extends DOMElement {
         const $target = $(event.target);
         const isChecked = $target.prop('checked');
         const todoId = $target.data('todo-id');
+
+        TodoAction.update({ id: todoId, completed: isChecked });
 
         console.log("todoId", todoId);
         console.log("$target", $target);
