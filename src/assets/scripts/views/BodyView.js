@@ -1,6 +1,7 @@
 import DOMElement from 'structurejs/display/DOMElement';
 
 import TodoItemView from './bodyview/TodoItemView';
+import TodoAction from '../actions/TodoAction';
 
 /**
  * TODO: YUIDoc_comment
@@ -41,8 +42,6 @@ class BodyView extends DOMElement {
 
         this._$toggleSelectAll = this.$element.find('.js-BodyView-toggleSelectAll');
         this._todoListContainer = this.getChild('.js-BodyView-todoList');
-
-        console.log("his._todoListContainer", this._todoListContainer);
     }
 
     /**
@@ -73,7 +72,7 @@ class BodyView extends DOMElement {
     layout(todoModels) {
         if (todoModels == null) { return; }
 
-        this._todoListContainer.removeChildren();
+        this._todoListContainer.removeChildren(true);
 
         const todoItemViews = todoModels.map(todoModel => new TodoItemView(todoModel));
 
@@ -107,9 +106,12 @@ class BodyView extends DOMElement {
     _onSelectAllToggle(event) {
         const $target = $(event.target);
         const isChecked = $target.prop('checked');
+        const todoItemViews = this._todoListContainer.children;
+        const todoModelIds = todoItemViews.map(todoItemView => todoItemView.getTodoModel().id);
 
-        console.log("isChecked", isChecked);
-        console.log("_onSelectAllToggle");
+        todoModelIds.forEach(id => {
+            TodoAction.update({ id: id, completed: isChecked })
+        });
     }
 
 }
