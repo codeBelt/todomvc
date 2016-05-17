@@ -43,15 +43,17 @@ class TodoAction extends BaseObject {
     /**
      * TODO: YUIDoc_comment
      *
-     * @method clearCompleted
-     * @param todoModelIds {Array<number>}
+     * @method delete
+     * @param todoModelIds {number|Array<number>}
      * @public
      */
-    async clearCompleted(todoModelIds) {
+    async delete(ids) {
         try {
 
+            const todoModelIds = (ids instanceof Array) ? ids : [ids];
+
             const promises = todoModelIds.map(todoModelId => {
-                return fetch(`/api/todos/${todoModelId}`, { method: 'DELETE' });
+                return fetch(`/api/todos/${ todoModelId }`, { method: 'DELETE' });
             });
 
             let results = await Promise.all(promises);
@@ -66,39 +68,27 @@ class TodoAction extends BaseObject {
      * TODO: YUIDoc_comment
      *
      * @method update
-     * @param todoModel {number}
+     * @param data {any}
      * @public
      */
-    async update(todoModel) {
-        EventBroker.dispatchEvent(TodoEvent.UPDATE, todoModel);
+    async update(data) {
+        try {
 
-        // try {
-        //
-        //     const response = await fetch(`/api/todos/`, {
-        //         method: 'PATCH',
-        //         headers: {
-        //             'Accept': 'application/json',
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: todoModel.toJSONString()
-        //     });
-        //
-        //     const responseData = await response.json();
-        //
-        //     // Example of updating the id if you needed from the server.
-        //     todoModel.id = responseData.id;
-        //
-        //     // Dispatch so the store can get the event.
-        //     EventBroker.dispatchEvent(TodoEvent.UPDATE, todoModel);
-        //     // const response = await fetch(`/api/todos/${todoModelId}`, { method: 'DELETE' });
-        //     // const data = await response.json();
-        //     // console.log("response", response);
-        //     // console.log("data", data);
-        //     //
-        //     // Dispatch so the store can get the event.
-        //     // EventBroker.dispatchEvent(TodoEvent.LOAD, todoModels);
-        //
-        // } catch(error) { console.error(error); }
+            const response = await fetch(`/api/todos/${ data.id }`, {
+                method: 'PATCH',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const responseData = await response.json();
+
+            // Dispatch so the store can get the event.
+            EventBroker.dispatchEvent(TodoEvent.UPDATE, data);
+
+        } catch(error) { console.error(error); }
     }
 
     /**

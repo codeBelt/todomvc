@@ -121,9 +121,10 @@ class TodoStore extends EventDispatcher {
      * @protected
      */
     _onUpdate(event) {
-        const todoModel = event.data;
+        const data = event.data;
+        const todoModel = this._storeWarehouse.find(todoModel => todoModel.id === data.id);
 
-        // this._storeWarehouse.push(todoModel);
+        todoModel.update(data);
 
         this.dispatchEvent(this.CHANGE_EVENT);
     }

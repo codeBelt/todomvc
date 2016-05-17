@@ -110,7 +110,7 @@ class App extends DOMElement {
         }
 
         this._bodyView.layout(models);
-        this._footerView.layout(todoModels);
+        this._footerView.layout(todoModels, currentRoute.routePattern);
     }
 
     /**

@@ -13,12 +13,30 @@ class FooterView extends DOMElement {
     /**
      * TODO: YUIDoc_comment
      *
+     * @property _$navItems
+     * @type {jQuery}
+     * @protected
+     */
+    _$navItems = null;
+
+    /**
+     * TODO: YUIDoc_comment
+     *
      * @property _$clearCompletedBtn
      * @type {jQuery}
      * @protected
      */
     _$clearCompletedBtn = null;
-    
+
+    /**
+     * TODO: YUIDoc_comment
+     *
+     * @property _$count
+     * @type {jQuery}
+     * @protected
+     */
+    _$count = null;
+
     /**
      * TODO: YUIDoc_comment
      *
@@ -38,6 +56,7 @@ class FooterView extends DOMElement {
     create() {
         super.create();
 
+        this._$navItems = this.$element.find('.js-FooterView-navItem');
         this._$clearCompletedBtn = this.$element.find('.js-FooterView-clearCompletedBtn');
         this._$count = this.$element.find('.js-FooterView-count');
     }
@@ -67,29 +86,30 @@ class FooterView extends DOMElement {
     /**
      * @overridden DOMElement.layout
      */
-    layout(todoModels) {
+    layout(todoModels, routePattern) {
         if (todoModels == null) { return; }
-        
+
         this._todoModels = todoModels;
 
         const activeTodoCount = this._todoModels.length;
         const plural = (activeTodoCount === 1) ? '' : 's';
-        const text = `<strong>${activeTodoCount}</strong> item${plural} left`;
+        const text = `<strong>${ activeTodoCount }</strong> item${ plural } left`;
 
         this._$count.html(text);
+
+        this._$navItems.removeClass('selected');
+
+        let $navItem = this._$navItems.filter(`[href*='${ routePattern }']`);
+
+        $navItem = ($navItem.length === 0) ? this._$navItems.eq(0) : $navItem;
+
+        $navItem.addClass('selected');
     }
 
-    /**
-     * @overridden DOMElement.destroy
-     */
-    destroy() {
-        this.disable();
 
-        // Call destroy on any child objects.
-        // This super method will also null out your properties for garbage collection.
-
-        super.destroy();
-    }
+    //--------------------------------------------------------------------------------
+    // EVENTS HANDLERS
+    //--------------------------------------------------------------------------------
 
     /**
      * TODO: YUIDoc_comment
@@ -103,8 +123,8 @@ class FooterView extends DOMElement {
             ._todoModels
             .filter(todoModel => todoModel.completed === true)
             .map(todoModel => todoModel.id);
-        
-        TodoAction.clearCompleted(todoModelIds);
+
+        TodoAction.delete(todoModelIds);
     }
 
 }

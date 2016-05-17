@@ -1,7 +1,8 @@
 <li data-todo-id="{{id}}" class="{{#if completed}}completed{{/if}}">
     <div class="view">
         <input class="toggle js-TodoItemView-completeCheckbox" type="checkbox" {{#if completed}}checked{{/if}} data-todo-id="{{id}}">
-        <label>{{title}}</label>
-        <button class="destroy"></button>
+        <label class="js-TodoItemView-label">{{title}}</label>
+        <button class="destroy js-TodoItemView-deleteBtn" data-todo-id="{{id}}"></button>
     </div>
+    <input class="edit js-TodoItemView-editInput" value="{{title}}" data-todo-id="{{id}}">
 </li>
