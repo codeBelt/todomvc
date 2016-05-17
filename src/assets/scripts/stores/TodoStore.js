@@ -78,7 +78,8 @@ class TodoStore extends EventDispatcher {
      * @public
      */
     getAll() {
-        return this._storeWarehouse;
+        // Return a copy of the array.
+        return this._storeWarehouse.slice();
     }
 
     //--------------------------------------------------------------------------------
