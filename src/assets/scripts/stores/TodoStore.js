@@ -139,13 +139,7 @@ class TodoStore extends EventDispatcher {
     _onClear(event) {
         const todoModelIds = event.data;
 
-        for (let i = this._storeWarehouse.length - 1; i >= 0; i--) {
-            const todoModelId = this._storeWarehouse[i].id;
-
-            if (todoModelIds.indexOf(todoModelId) >= 0) {
-                this._storeWarehouse.splice(i, 1);
-            }
-        }
+        this._storeWarehouse = this._storeWarehouse.filter(todoModel => todoModelIds.indexOf(todoModel.id) === -1);
 
         this.dispatchEvent(this.CHANGE_EVENT);
     }
