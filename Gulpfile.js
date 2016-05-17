@@ -69,7 +69,7 @@ gulp.task('default', (done) => {
 gulp.task('build', (done) => {
     const tasks = [
         ['clean:dest'],
-        ['buildStatic', 'buildMarkup', 'buildStyles', 'buildScripts', 'buildJST']
+        ['buildStatic', 'buildMarkup', 'buildStyles', 'buildVendor', 'buildScripts', 'buildJST']
     ];
 
     if (isProd === true) {
@@ -157,7 +157,9 @@ gulp.task('watch', (done) => {
     });
 
     // Watch and trigger tasks on file changes
-    gulp.watch(env.DIR_SRC + '/assets/scripts/**/*', ['buildScripts']);
+    // gulp.watch(env.DIR_SRC + '/assets/scripts/**/*', ['buildScripts']);
+    runSequence(['watchScripts']);
+
     gulp.watch(env.DIR_SRC + '/assets/styles/**/*', ['buildStyles']);
     gulp.watch(env.DIR_SRC + '/**/*.{hbs,html}', ['buildMarkup']);
     gulp.watch(env.DIR_SRC + '/templates/jst/**/*', ['buildJST']);

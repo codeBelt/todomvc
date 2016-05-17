@@ -12,7 +12,8 @@
   "browserify": {
     "transform": [
       [
-        "browserify-shim", {
+        "browserify-shim",
+        {
           "global": true
         }
       ]
@@ -43,6 +44,7 @@
     "gulp-hb": "^5.1.0",
     "gulp-header": "^1.7.1",
     "gulp-if": "^2.0.0",
+    "gulp-notify": "^2.2.0",
     "gulp-plumber": "^1.1.0",
     "gulp-prettify": "^0.4.0",
     "gulp-rename": "^1.2.2",
@@ -63,12 +65,12 @@
     "run-sequence": "^1.1.5",
     "slash": "^1.0.0",
     "time-require": "^0.1.2",
+    "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.7.0",
     "yargs": "^4.6.0"
   },
   "scripts": {
-
     "postinstall": "bower install && gulp --dev && gulp watch --open"
-
   }
 }
