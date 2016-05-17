@@ -74,6 +74,7 @@ class App extends DOMElement {
     create() {
         super.create();
 
+        // Setup our views.
         this._headerView = new HeaderView(this.$element.find('.js-HeaderView'));
         this.addChild(this._headerView);
 
@@ -83,8 +84,10 @@ class App extends DOMElement {
         this._footerView = new FooterView(this.$element.find('.js-FooterView'));
         this.addChild(this._footerView);
 
+        // Action to load the exsiting todo items.
         TodoAction.load();
 
+        // Setup our routes.
         Router.add('', this._onRoute, this);
         Router.add('active', this._onRoute, this);
         Router.add('completed', this._onRoute, this);
@@ -170,13 +173,15 @@ class App extends DOMElement {
     }
 
     /**
-     * TODO: YUIDoc_comment
+     * Triggerd when the {{#crossLink "Router"}}{{/crossLink}} detects a route change.
      *
      * @method _onRoute
      * @param event {RouterEvent}
      * @private
      */
     _onRoute(event) {
+        console.log('event', event);
+
         this.layout();
     }
 
