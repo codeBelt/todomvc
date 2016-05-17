@@ -1,6 +1,7 @@
 import DOMElement from 'structurejs/display/DOMElement';
 
 import TodoAction from '../actions/TodoAction';
+
 /**
  * TODO: YUIDoc_comment
  *
@@ -91,12 +92,39 @@ class FooterView extends DOMElement {
 
         this._todoModels = todoModels;
 
-        const activeTodoCount = this._todoModels.length;
+        this._updateCountText();
+        this._updateNavItems(routePattern);
+    }
+
+    //--------------------------------------------------------------------------------
+    // HELPER METHODS
+    //--------------------------------------------------------------------------------
+
+    /**
+     * TODO: YUIDoc_comment
+     *
+     * @method _updateCountText
+     * @protected
+     */
+    _updateCountText() {
+        const activeTodoCount = this._todoModels.filter(todoModel => todoModel.completed === false).length;
+        const completedTodoCount = this._todoModels.filter(todoModel => todoModel.completed === true).length;
         const plural = (activeTodoCount === 1) ? '' : 's';
         const text = `<strong>${ activeTodoCount }</strong> item${ plural } left`;
 
         this._$count.html(text);
 
+        // Hides/Shows the clear button.
+        this._$clearCompletedBtn.toggle(completedTodoCount > 0);
+    }
+
+    /**
+     * TODO: YUIDoc_comment
+     *
+     * @method _updateNavItems
+     * @protected
+     */
+    _updateNavItems(routePattern) {
         this._$navItems.removeClass('selected');
 
         let $navItem = this._$navItems.filter(`[href*='${ routePattern }']`);
@@ -105,7 +133,6 @@ class FooterView extends DOMElement {
 
         $navItem.addClass('selected');
     }
-
 
     //--------------------------------------------------------------------------------
     // EVENTS HANDLERS

@@ -91,6 +91,7 @@ class App extends DOMElement {
      */
     layout() {
         const currentRoute = Router.getCurrentRoute();
+
         if (currentRoute == null) { return; }
 
         const todoModels = TodoStore.getAll();
@@ -119,8 +120,9 @@ class App extends DOMElement {
     destroy() {
         this.disable();
 
-        // Call destroy on any child objects.
-        // This super method will also null out your properties for garbage collection.
+        this._headerView.destroy();
+        this._bodyView.destroy();
+        this._footerView.destroy();
 
         super.destroy();
     }
@@ -133,7 +135,7 @@ class App extends DOMElement {
      * Triggered when event the TodoStore.{{#crossLink "TodoStore/CHANGE_EVENT:event"}}{{/crossLink}} is dispatched.
      *
      * @method _onStoreChange
-     * @param event
+     * @param event {BaseEvent}
      * @private
      */
     _onStoreChange(event) {
