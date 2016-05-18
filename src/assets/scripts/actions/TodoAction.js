@@ -37,7 +37,7 @@ class TodoAction extends BaseObject {
             // Dispatch so the store can get the event.
             EventBroker.dispatchEvent(TodoEvent.LOAD, todoModels);
 
-        } catch(error) { console.error(error); }
+        } catch(error) { console.error(error.stack); }
     }
 
     /**
@@ -61,7 +61,7 @@ class TodoAction extends BaseObject {
             // Dispatch so the store can get the event.
             EventBroker.dispatchEvent(TodoEvent.CLEAR_COMPLETED, todoModelIds);
 
-        } catch(error) { console.error(error); }
+        } catch(error) { console.error(error.stack); }
     }
 
     /**
@@ -88,7 +88,7 @@ class TodoAction extends BaseObject {
             // Dispatch so the store can get the event.
             EventBroker.dispatchEvent(TodoEvent.UPDATE, data);
 
-        } catch(error) { console.error(error); }
+        } catch(error) { console.error(error.stack); }
     }
 
     /**
@@ -118,7 +118,7 @@ class TodoAction extends BaseObject {
             // Dispatch so the store can get the event.
             EventBroker.dispatchEvent(TodoEvent.ADD, todoModel);
 
-        } catch(error) { console.error(error); }
+        } catch(error) { console.error(error.stack); }
     }
 
 }
